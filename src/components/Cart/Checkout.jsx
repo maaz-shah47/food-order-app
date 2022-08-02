@@ -27,10 +27,14 @@ const Checkout = (props) => {
 
     const formIsValid = nameIsValid && streetIsValid && cityIsValid && postalIsValid
 
-    if(!formIsValid) {
-      
+    if(formIsValid) {
+      props.onConfirm({
+        name: nameValue,
+        street: streetValue,
+        city: cityValue,
+        postal: postalValue
+      })
     }
-    console.log(nameValue)
   };
 
   return (
