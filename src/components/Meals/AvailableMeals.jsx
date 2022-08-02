@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import Card from '../UI/Card';
+import Spinner from 'react-bootstrap/Spinner';
+import MealItem from './MealItem/MealItem';
 
 import classes from './AvailableMeals.module.css'
-import MealItem from './MealItem/MealItem';
 
 
 const AvailableMeals = () => {
   const [ allMeals, setAllMeals] = useState([]);
+  const [ isLoading, setIsLoading ] = useState(true);
 
   useEffect(() => {
     const fetchMeals = async () => {
@@ -22,9 +24,14 @@ const AvailableMeals = () => {
         })
       }
       setAllMeals(loadedMeals)
+      setIsLoading(false)
     }
     fetchMeals()
   }, [])
+
+  if(isLoading) {
+    return <Spinner animation="border" variant="primary" />
+  }
 
   const meals = allMeals.map(meal => (
     <MealItem
