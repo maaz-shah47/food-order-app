@@ -9,10 +9,16 @@ import classes from './AvailableMeals.module.css'
 const AvailableMeals = () => {
   const [ allMeals, setAllMeals] = useState([]);
   const [ isLoading, setIsLoading ] = useState(true);
+  const [ error, setError ] = useState();
 
   useEffect(() => {
     const fetchMeals = async () => {
       const response = await fetch('https://react-food-order-app-98245-default-rtdb.firebaseio.com/meals.json')
+      if (!response.ok)
+      {
+        throw new Error('Something went wrong');
+      }
+
       const data = await response.json()
 
       const loadedMeals = []
@@ -26,11 +32,23 @@ const AvailableMeals = () => {
       setAllMeals(loadedMeals)
       setIsLoading(false)
     }
-    fetchMeals()
+
+    fetchMeals().catch(error => {
+      setIsLoading(false)
+      setError(error.message)
+    })
   }, [])
 
   if(isLoading) {
     return <Spinner animation="border" variant="primary" />
+  }
+
+  if(error){
+    return(
+      <section>
+        <p>{error}</p>
+      </section>
+    )
   }
 
   const meals = allMeals.map(meal => (
